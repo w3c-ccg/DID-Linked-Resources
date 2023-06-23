@@ -213,9 +213,10 @@ versions being able to be fetched
 metadata or otherwise)
 
 
-
 5. Resource Request Parameters {#request}
 =====================
+
+The following list defines which specific parameters are required and are optional for a request to create a resource:
 
 | Parameter                 | Type                                                          | Required?    |
 | ------------------------- | ------------------------------------------------------------- | ----------- | 
@@ -229,7 +230,7 @@ metadata or otherwise)
 6. Resource Response Parameters {#response}
 =====================
 
-The following list defines which specific parameters a resource response format may contain:
+The following list defines which specific parameters are required and which are optional for a response, following the creation of a Resource:
 
 | Parameter | Description |
 | :--- | :--- |
@@ -338,53 +339,27 @@ Example:
       }]
 }
 ```
+7 Resolution and Dereferecing process {#dereferencing}
+=====================
 
-6.2 Discoverability via DID URL dereferencing {#dereferencing}
+This section outlines the process for resolving a DID URL to retrieve the linked resource.
+
+7.1 DID Resolution and Dereferencing
+
+When you resolve a DID you get a DID Document as by DID Core. When you dereference a DID, you may get the DID Document, a portion of a DID document, or the resource at the end of a service endpoint (if the DID contains a service component). You can only resolve a DID to return a DID document, and you can only dereference a DID reference to return a digital resource.
+
+7.2 Resource resolution and dereferencing {#dereferencing}
+
+Normal DID URL dereferencing can be conceived in two steps:
+
+1. A DID is resolved to a DID Document;
+2. A resource within / associated with the DID Document is identified, based on the portion of the DID URL that follows the DID (path, query, fragment as defined by the ABNF in section 3.2 of the DID 1.0 specification.).
 
 Requests to fetch Resources are considered as a DID URL Dereferencing scenario it uses [DID URL paths](https://w3c.github.io/did-core/#path) to lead to a Resource object, rather than a DIDDoc.
 
 On the other hand, Resources _metadata_ requests are handled like DID URL Resolution since the result is a subsection of `didDocumentMetadata` specific to that resource.
 
-API endpoints related to Resources are described below. All of these request _types_ are `GET` requests, with `POST` and `PUT` requests disallowed.
-
-#### Get a specific Resource
-
-Returns the Resource data/payload stored for specified resource. `HEAD` request _type_ is also allowed for this endpoint since it can be used for [HTTP content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content\_negotiation) phase by client applications. In this case, _only_ the HTTP **Response** headers are returned without the body.
-
-**Endpoint**: `/1.0/identifiers/<did>/resources/<resource_id>`
-
-1. **Request** HTTP headers
-   1. `Accept` should allow `*/*` _or_ match the `mediaType` of the Resource
-   2. [`Accept-Encoding`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding) may be allowed compression methods (e.g., `gzip`, `compress`, etc.)
-2. **Response** HTTP headers
-   1. Status code `200 OK`
-   2. `Content-Type` should be set to `mediaType>` of the Resource
-   3. `Content-Encoding` should be set to a valid content compression method in `Accept-Encoding` and response compressed accordingly
-   4. [`Content-Length`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length) should be set to the Resource size, in decimal bytes
-3. **Response** HTTP body
-   1. Resource, encoded correctly according to the `mediaType`
-
-#### Get _metadata_ for a specific resource
-
-Return metadata for a specified resource. This is effectively a portion of the DIDDoc Metadata block.
-
-**Endpoint**: `/1.0/identifiers/<did>/resources/<resource_id>/metadata`
-
-#### Get metadata for _all_ Resources linked to a DID
-
-Returns metadata for all Resources directly linked to/controlled by a DID. This is effectively the full `linkedResourceMetadata` section in DIDDoc Metadata block.
-
-**Endpoint**: `/1.0/identifiers/<did>/resources/all`
-
-**Alternative endpoints**
-
-1. `/1.0/identifiers/<did>/resources/`
-   1. Status code `301`
-   2. Redirect to `/resources/all`
-2. `/1.0/identifiers/<did>/resources`
-   1. Throw an `invalidDidUrl` error
-
-### Query parameters
+7.3 Resource resolution and dereferencing parameters
 
 Here we have an ability to specify different parameters to filter to particular DID-Linked Resources.
 
@@ -400,7 +375,7 @@ Here we have an ability to specify different parameters to filter to particular 
 
 Like with DIDDoc query parameters, these can all be chained together to create complex requests for specific DID-Linked Resources at particular points in time or associated with particular DIDDoc versions.&#x20;
 
-### Rules and logic for handling ambiguous queries
+7.4 Rules and logic for handling ambiguous queries
 
 It is important to understand how our resolver logically handles more complex dereferencing requests. We have set some baseline defaults and rules to ensure a logical and consistent experience for clients who use our resolver.
 
@@ -484,7 +459,10 @@ For example, in the below example, there are multiple resources with the `resour
 
 </details>
 
-**ResourceId**
+8 Resolution and Dereferecing examples {#examples}
+=====================
+
+8.1 ResourceId
 
 `ResourceId` parameter can be used for filtering a particular resource version by specifically identifying its unique ID.
 
@@ -510,7 +488,7 @@ Hello world
 
 </details>
 
-**ResourceCollectionId**
+8.2 ResourceCollectionId
 
 `resourceCollectionId` parameter filters all the resource by `collectionId` field. By default cause we are asking for resources for a particular DID it already includes all the resource with the same `collectionId` and this parameter can used mostly as sanity check. Without `resourceMetadata=true` parameter will return the latest created resource if there is only one resource or an unambiguous resource.
 
@@ -553,8 +531,7 @@ Hello world
 </details>
 
 
-
-**ResourceType**
+8.3 ResourceType
 
 This parameter is also just a filter by `Type` field through resources. But there is a corner case if the user asks about exact resource (exact data). If after applying all the parameters in request several resources are left with the same `Name` - the latest one will be responded. Otherwise - error `NotFoundError` will be raised.
 
@@ -598,7 +575,7 @@ This parameter is also just a filter by `Type` field through resources. But ther
 
 
 
-**ResourceName**
+8.4 ResourceName
 
 Behavior of this parameter is similar with [resourceType](adr-005-did-resolution-and-did-url-dereferencing.md#resourcetype) one. If there is no ambiguous resource, it will be fetched. Otherwise greater specifity is required.&#x20;
 
@@ -640,7 +617,7 @@ Behavior of this parameter is similar with [resourceType](adr-005-did-resolution
 
 </details>
 
-**ResourceVersion**
+8.5 ResourceVersion
 
 This parameter filters by `Version` field. We introduced it with latest network upgrade and can be optionally set to identify a version of a resource with a particular string.
 
@@ -684,7 +661,7 @@ This parameter filters by `Version` field. We introduced it with latest network 
 
 
 
-**ResourceVersionTime**
+8.6 ResourceVersionTime
 
 **Important:** This parameter must always be accompanied by another resource query qualifier.
 
@@ -718,7 +695,7 @@ The main goal here is to get the nearest resource for `resourceVersionTime` valu
 
 </details>
 
-**Checksum**
+8.7 Checksum
 
 It just checks that `checksum` is the same as resource's metadata and also can used as a sanity check. For example, if the user knows what is exact checksum then it may be checked before actual downloading.
 
@@ -750,7 +727,7 @@ It just checks that `checksum` is the same as resource's metadata and also can u
 
 </details>
 
-**ResourceMetadata**
+8.8 ResourceMetadata
 
 This parameter a kind of modifier which works in the same manner as [metadata](adr-005-did-resolution-and-did-url-dereferencing.md#metadata) but applies to resources. It allows to get only Metadata information about resource(s) without downloading. Also it changes the flow for `resourceType` and `resourceName` parameters and general meaning of this parameter - just filter. So, here it allows to create a chain of parameters and apply all of them to the resourceCollection and get only interested resource metadata. Possible variants:
 
@@ -1031,3 +1008,26 @@ This parameter a kind of modifier which works in the same manner as [metadata](a
 ```
 
 </details>
+
+9 Security considerations {#security}
+=====================
+This section discusses the security considerations associated with linking and dereferencing DID-Linked Resources.
+
+9.1 Access Control
+<TODO> Provides guidance on access control mechanisms for ensuring that only authorized entities can access the linked resources.
+
+9.2 Authenticity and Integrity
+<TODO> Addresses the importance of ensuring the authenticity and integrity of the linked resources. It discusses techniques such as digital signatures and cryptographic proofs to verify the origin and integrity of the resources.
+
+9.3 Confidentiality
+<TODO> Discusses considerations for preserving the confidentiality of the linked resources, especially when accessing them over insecure channels. It suggests techniques such as encryption and secure communication protocols.
+
+9 Privacy considerations {#privacy}
+=====================
+This section explores the privacy considerations associated with DID-Linked Resources.
+
+9.1 Linkability and Pseudonymity
+<TODO> Examines the potential linkability of resources to DIDs and the impact on privacy. It discusses techniques for preserving pseudonymity and minimizing the correlation of identities across different resources.
+
+9.2 Information Exposure
+<TODO> Addresses the risks of unintentional information exposure when dereferencing DID URLs. It provides recommendations for managing and controlling the disclosure of sensitive information.
