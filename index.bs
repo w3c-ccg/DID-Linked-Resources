@@ -379,17 +379,17 @@ Like with DIDDoc query parameters, these can all be chained together to create c
 
 It is important to understand how our resolver logically handles more complex dereferencing requests. We have set some baseline defaults and rules to ensure a logical and consistent experience for clients who use our resolver.
 
-1. **Ambiguity generally throws an error**
+7.4.1. **Ambiguity generally throws an error**
 
 If the request specifies a parameter where there are multiple potential results, such as where the DID has two resources of the same `resourceType` ('String') but `resourceName` is not the same,  an error will be thrown because there is not enough information to discern which resource is being requested.
 
-2. **Multiple versions of the same resource**
+7.4.2. **Multiple versions of the same resource**
 
 If there are multiple resources with the same `resourceType` and `resourceName` but with different `versionIds,` and there is no parameter specified to fetch a particular version, **the resolver will fetch the latest resource by default**.
 
 This is because the query is not ambiguous in terms of discerning which set of resources to dereference to, but is only ambiguous in terms of which version of that resource to fetch.&#x20;
 
-3. **Ambiguity + resourceMetadata=true**
+7.4.3. **Ambiguity + resourceMetadata=true**
 
 If there is an ambiguous query, such as where there are two resources with the same name but different types, AND there is a resourceMetadata=true parameter, resource data pertaining to all the resources which could potentially be seen as being ambiguous will be returned.&#x20;
 
