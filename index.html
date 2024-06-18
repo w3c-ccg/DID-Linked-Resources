@@ -8,7 +8,7 @@
   <meta content="Bikeshed version 82ce88815, updated Thu Sep 7 16:33:55 2023 -0700" name="generator">
   <link href="https://w3c-ccg.github.io/did-linked-resources" rel="canonical">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="6e7de189ca265eb077014fc525083da28cd29ab7" name="document-revision">
+  <meta content="883bbfc8f92ef582e3803085f3937e72db999955" name="document-revision">
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -652,7 +652,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
    <p>DID-Linked Resources are digital files that can be retrieved and referenced using a persistent and unique DID URL.</p>
    <p>This specification defines common requirements, algorithms including their request formats and response formats, architectural options, and various considerations for how DID-Linked Resources SHOULD act as persistent identifiers for referencing and retrieving digital Resources (such as data schemas, status lists, trust registries, governance documents, or policy definitions). This specification complements the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, including its patterns and algorithms for DID URL resolution and dereferencing.</p>
    <p>By using DID URLs which remain conformant with W3C Decentralized Identifiers (DIDs) v1.0 Recommendation <a data-link-type="biblio" href="#biblio-did-core" title="Decentralized Identifiers (DIDs) v1.0">[DID-CORE]</a> and the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, existing DID Resolvers will be able to dereference these DID URLs to retrieve the identified resources using the DID URL query syntax in this specification.</p>
-   <p><b>Note:</b> while this specification defines some base-level functionality for DID URL dereferencing, the actual steps required to communicate with a DID’s verifiable data registry are defined by the applicable DID method specification.</p>
+   <div class="note" role="note"> <b>Note:</b> while this specification defines some base-level functionality for DID URL dereferencing, the actual steps required to communicate with a DID’s verifiable data registry are defined by the applicable DID method specification. </div>
    <h3 class="heading settled" data-level="1.1" id="conformance"><span class="secno">1.1. </span><span class="content">Conformance</span><a class="self-link" href="#conformance"></a></h3>
    <p>In addition to sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.
 The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to be interpreted as described in BCP 14 <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a> <a data-link-type="biblio" href="#biblio-rfc8174" title="Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words">[RFC8174]</a> when, and only when, they appear in all capitals, as shown here.</p>
@@ -698,7 +698,7 @@ The key words MAY, MUST, MUST NOT, OPTIONAL, and SHOULD in this document are to 
    <p>The following path-based syntax is an example of how a DID Method may construct a DID URL to point to a DID-Linked Resource:</p>
 <pre class="language-json highlight">did<c- p>:</c->example<c- p>:</c->&lt;u<c- kc>n</c->ique<c- mi>-</c->ide<c- kc>nt</c->i<c- kc>f</c->ier>/resources/&lt;u<c- kc>n</c->iversally<c- mi>-</c->u<c- kc>n</c->ique<c- mi>-</c->ide<c- kc>nt</c->i<c- kc>f</c->ier>
 </pre>
-   <p><b>Note:</b> The above path-based syntax would be an implementation-specific way of referencing a resource.</p>
+   <div class="note" role="note"> <b>Note:</b> The above path-based syntax would be an implementation-specific way of referencing a resource. </div>
    <h3 class="heading settled" data-level="3.3" id="collections"><span class="secno">3.3. </span><span class="content">DID-Linked Resource Collections</span><a class="self-link" href="#collections"></a></h3>
    <p>Resources are organized into groups or sets called "Collections". Each DID may have an associated Collection, and the Collection ID is derived from the unique identifier of the DID.</p>
    <p>The most important concept used in this design is that each Collection is identified using a DID and is described using a DID document.</p>
@@ -709,7 +709,7 @@ For example, the following DID:</p>
    <p>will derive the Collection ID:</p>
 <pre class="language-json highlight"><c- mi>0</c->a<c- mi>5</c->b<c- mi>94</c->d<c- mi>0-</c->a<c- mf>417-48e</c->d<c- mi>-</c->a<c- mi>6</c-><c- kc>f</c-><c- mi>5-4</c->abc<c- mf>9e95888</c->d
 </pre>
-   <p><b>Note:</b> The Collection ID may take the syntactical form of the DID method that the DID-Linked Resource is associated with.</p>
+   <div class="note" role="note"> <b>Note:</b> The Collection ID may take the syntactical form of the DID method that the DID-Linked Resource is associated with. </div>
    <h2 class="heading settled" data-level="4" id="algorithm"><span class="secno">4. </span><span class="content">DID-Linked Resources Algorithm</span><a class="self-link" href="#algorithm"></a></h2>
    <p>To create a "DID-Linked Resource", you MUST first create a "parent" DID, from which the Collection ID can be derived, and under which the associated Resources will be linked.</p>
    <p>Next, to create a digital Resource associated with the "parent" DID, you MUST provide the following Request inputs:</p>
@@ -1236,7 +1236,7 @@ For example, the following DID:</p>
 </pre>
    </details>
    <h3 class="heading settled" data-level="11.6" id="resourceversiontime"><span class="secno">11.6. </span><span class="content">ResourceVersionTime</span><a class="self-link" href="#resourceversiontime"></a></h3>
-   <p><b>Important:</b> This parameter must always be accompanied by another resource query qualifier.</p>
+   <div class="note" role="note"> <b>Important:</b> This parameter must always be accompanied by another resource query qualifier. </div>
    <p>The main goal here is to get the nearest resource for `resourceVersionTime` value. "Nearest" means that if we are asking for time between `resource1` and `resource2` were created - `resource1` will be returned. In case if requested `resourceVersionTime` is before the first resource created - `NotFoundError` will be returned. The most useful use-case here is checking that some "Credential" (driver’s license) was active at `resourceVersionTime` (was not revoked from Revocation Registry for example).</p>
    <p>For example:</p>
    <details>
