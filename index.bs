@@ -18,7 +18,7 @@ This specification defines common requirements, algorithms including their reque
 
 By using DID URLs which remain conformant with W3C Decentralized Identifiers (DIDs) v1.0 Recommendation [[DID-CORE]] and the <a href="https://w3c-ccg.github.io/did-resolution/">DID Resolution Specification</a>, existing DID Resolvers will be able to dereference these DID URLs to retrieve the identified resources using the DID URL query syntax in this specification.
 
-<b>Note:</b> while this specification defines some base-level functionality for DID URL dereferencing, the actual steps required to communicate with a DID's verifiable data registry are defined by the applicable DID method specification.
+<div class="note"> <b>Note:</b> while this specification defines some base-level functionality for DID URL dereferencing, the actual steps required to communicate with a DID's verifiable data registry are defined by the applicable DID method specification. </div>
 
 Conformance {#conformance}
 ---------------------
@@ -92,7 +92,7 @@ The following path-based syntax is an example of how a DID Method may construct 
 did:example:<unique-identifier>/resources/<universally-unique-identifier>
 ```
 
-<b>Note:</b> The above path-based syntax would be an implementation-specific way of referencing a resource.
+<div class="note"> <b>Note:</b> The above path-based syntax would be an implementation-specific way of referencing a resource. </div>
 
 DID-Linked Resource Collections {#collections}
 ---------------------
@@ -114,7 +114,7 @@ will derive the Collection ID:
 0a5b94d0-a417-48ed-a6f5-4abc9e95888d
 ```
 
-<b>Note:</b> The Collection ID may take the syntactical form of the DID method that the DID-Linked Resource is associated with.
+<div class="note"> <b>Note:</b> The Collection ID may take the syntactical form of the DID method that the DID-Linked Resource is associated with. </div>
 
 DID-Linked Resources Algorithm {#algorithm}
 =====================
@@ -818,7 +818,7 @@ did:example:d8ac0372-0d4b-413e-8ef5-8e8f07822b2c?resourceVersion=b9029cf7-c40b-4
 ResourceVersionTime
 ---------------------
 
-<b>Important:</b> This parameter must always be accompanied by another resource query qualifier.
+<div class="note"> <b>Important:</b> This parameter must always be accompanied by another resource query qualifier. </div>
 
 The main goal here is to get the nearest resource for `resourceVersionTime` value. "Nearest" means that if we are asking for time between `resource1` and `resource2` were created - `resource1` will be returned. In case if requested `resourceVersionTime` is before the first resource created - `NotFoundError` will be returned. The most useful use-case here is checking that some "Credential" (driver's license) was active at `resourceVersionTime` (was not revoked from Revocation Registry for example).
 
